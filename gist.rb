@@ -69,7 +69,12 @@ class Gist
 		def auth
 			user  = `git config --global github.user`.strip
 			token = `git config --global github.token`.strip
-
+      
+      if token.start_with?('!')
+        token_cmd = token[1, token.length-1]
+        token = %x[ #{token_cmd} ]
+      end
+      
 			user.empty? ? {} : { :login => user, :token => token }
 		end
 	end
